@@ -79,7 +79,10 @@ public class MultipleLinearRegression {
 	}
 
 	public void setFeatures(Feature[] features) {
-		this.features = features;
+		this.features = new Feature[features.length];
+		for(int i = 0; i < features.length; i++){
+			this.features[i] = features[i];
+		}
 	}
 
 	public Dependent getPredictor() {
@@ -398,7 +401,9 @@ public class MultipleLinearRegression {
 		this.dependent = dependent;
 		this.numberDataPoints = features[0].getDataValues().length;
 		this.numberFeatures = features.length;
-		this.features = new Feature[features.length + 1];
+		if(this.features == null)
+			this.features = new Feature[features.length + 1];
+		else this.features = new Feature[this.features.length];
 		this.features = this.addUnitVector(features, dependent.getDataValues().length);
 		
 		for(int i = 1; i < this.features.length; i++){
@@ -443,8 +448,80 @@ public class MultipleLinearRegression {
 		return copyF;
 	}
 	
+	
 	/*
-	 * 
+	 * Adds one Feature to the features' attribute array.
+	 */
+	public void addFeature(Feature f) {
+		Feature[] tempFeatures = new Feature[this.features.length+1];
+		for(int i = 0; i < this.features.length; i++){
+			tempFeatures[i] = this.features[i];
+		}
+		tempFeatures[tempFeatures.length-1] = f;
+		
+		this.setFeatures(tempFeatures);
+	}
+	
+	
+	/*
+	 * Adds all the elements of a Feature array passed as parameter
+	 * to the features' attribute array.
+	 */
+	public void addFeatures(Feature[] f) {
+		Feature[] tempFeatures = new Feature[this.features.length + f.length - 1];
+		int counter = 0, index = 0;
+		
+		//starts with index 1 in order to remove the array filled with 1s.
+		for(int i = 1; i < this.features.length; i++){
+			tempFeatures[i-1] = this.features[i];
+			counter++;
+			index++;
+		}
+		for(int i = 0; i < tempFeatures.length - counter; i++){
+			tempFeatures[index] = f[i];
+			index++;
+		}
+		this.setFeatures(tempFeatures);
+	}
+	
+	
+	/*
+	 * Removes one Feature of the features' attribute array.
+	 * The parameter is the Feature id.
+	 */
+	public void removeFeature(int id) {
+		Feature[] tempFeatures = new Feature[this.features.length - 1];
+		Feature f = null;
+		int index = 0;
+		for(int i = 0; i < this.features.length; i++){
+			if(this.features[i].getId() == id) {
+				f = this.features[i];
+			}
+			else continue;
+		}
+		
+		if(f == null) return;
+		
+		else {
+			for(int i = 0; i < this.features.length; i++) {
+				if(this.features[i].getId() == f.getId()) {
+					index = i;
+					continue;
+				}
+					
+				else {
+					tempFeatures[index] = this.features[i];
+					index++;
+				}
+			}
+		}
+		this.setFeatures(tempFeatures);
+		System.out.println();
+	}
+	
+	
+	/*
+	 * Prints the array of the slopes and intercept.
 	 */
 	public void printSlopeVector() {
 		String debugPrinter = "Slope vector: \n [";
@@ -456,8 +533,9 @@ public class MultipleLinearRegression {
 		System.out.println(debugPrinter);
 	}
 	
+	
 	/*
-	 * 
+	 * Prints the array of obtained errors.
 	 */
 	public void printErrorVector() {
 		String debugPrinter = "Error vector: \n [";
@@ -468,6 +546,7 @@ public class MultipleLinearRegression {
 		debugPrinter += "]\n";
 		System.out.println(debugPrinter);
 	}
+	
 	
 	/*
 	 * Prints results to an html file, as a report.
@@ -673,6 +752,7 @@ public class MultipleLinearRegression {
 		this.writingToFileTime = elapsedTimeInSec;
 	}
 	
+	
 	/*
 	 * Computes the correlation between features and
 	 * returns a matrix with the correlation values.
@@ -705,6 +785,7 @@ public class MultipleLinearRegression {
 		return correlationsMatrix;
 	}
 	
+	
 	/*
 	 * Does the multiple linear regression process and calculates
 	 * also all the necessary statistics so the user can infer
@@ -727,26 +808,15 @@ public class MultipleLinearRegression {
 		 * the final multiple regression model.
 		 */
 		Matrix a = new Matrix(tempFeatures);
-		//a.print(tempFeatures.length, 4);
 		Matrix aT = a.transpose();
-		//aT.print(tempFeatures.length, 4);
 		Matrix y = new Matrix(this.dependent.getDataValues(), this.dependent.getDataValues().length);
-		//y.print(predictor.getDataValues().length, 4);
 		
 		Matrix partOne = (a.times(aT));
-		//System.out.println("A^T * A: ");
-		//partOne.print(tempFeatures.length, 4);
-		//System.out.println("(A^T * A)^(-1)");
 		partOne = partOne.inverse();
-		//partOne.print(tempFeatures.length, 4);
 		
 		Matrix partTwo = (a.times(y));
-		//System.out.println("X^T * Y");
-		//partTwo.print(tempFeatures.length, 4);
 		
 		a = partOne.times(partTwo);
-		//System.out.println("Final Vector:");
-		//a.print(tempFeatures.length, 4);
 		
 		this.setSlopeVector(a.getArray());
 		this.printSlopeVector();
