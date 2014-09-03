@@ -1,0 +1,20 @@
+> mydata = read.xls("allNumericalFeatures.xls")
+> fit <- lm(y~ExposureTime+RelativeHumidity, data=mydata)
+> summary(fit);
+
+Call:
+lm(formula = y ~ ExposureTime + RelativeHumidity, data = mydata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.8832 -3.2637 -0.2478  4.1445  7.7152 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(>|t|)
+(Intercept)       -12.700    252.263  -0.050    0.961
+ExposureTime        2.553      1.880   1.358    0.217
+RelativeHumidity    5.350     11.197   0.478    0.647
+
+Residual standard error: 5.938 on 7 degrees of freedom
+Multiple R-squared:  0.8675,	Adjusted R-squared:  0.8296 
+F-statistic: 22.92 on 2 and 7 DF,  p-value: 0.0008467

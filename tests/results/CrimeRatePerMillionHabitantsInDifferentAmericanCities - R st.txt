@@ -1,0 +1,38 @@
+> mydata = read.xls("CrimeRatePerMillionHabitantsInDifferentAmericanCities.xls")
+> fit <- lm(y~ViolentCrimeRate+AnnualPoliceFunding+PercentageMoreThan25YearsMoreThan4YearsOfHighSchool+X16To19NoHighSchoolGraduates+Percentage18To24YeardOldsInCollege+PercentageMoreThan25YearsOldWithMoreThan4YearsOfCollege, data=mydata)
+> summary(fit);
+
+Call:
+lm(formula = y ~ ViolentCrimeRate + AnnualPoliceFunding + PercentageMoreThan25YearsMoreThan4YearsOfHighSchool + 
+    X16To19NoHighSchoolGraduates + Percentage18To24YeardOldsInCollege + 
+    PercentageMoreThan25YearsOldWithMoreThan4YearsOfCollege, 
+    data = mydata)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-291.82 -105.31  -26.78   85.62  705.89 
+
+Coefficients:
+                                                         Estimate Std. Error t value
+(Intercept)                                             100.39361  370.69317   0.271
+ViolentCrimeRate                                          0.33234    0.05962   5.574
+AnnualPoliceFunding                                       3.99817    2.68248   1.490
+PercentageMoreThan25YearsMoreThan4YearsOfHighSchool       1.85791    5.24087   0.355
+X16To19NoHighSchoolGraduates                              7.83886    7.75987   1.010
+Percentage18To24YeardOldsInCollege                        2.55877    3.42695   0.747
+PercentageMoreThan25YearsOldWithMoreThan4YearsOfCollege  -3.23116   10.71537  -0.302
+                                                        Pr(>|t|)    
+(Intercept)                                                0.788    
+ViolentCrimeRate                                        1.52e-06 ***
+AnnualPoliceFunding                                        0.143    
+PercentageMoreThan25YearsMoreThan4YearsOfHighSchool        0.725    
+X16To19NoHighSchoolGraduates                               0.318    
+Percentage18To24YeardOldsInCollege                         0.459    
+PercentageMoreThan25YearsOldWithMoreThan4YearsOfCollege    0.764    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 195.2 on 43 degrees of freedom
+Multiple R-squared:  0.6132,	Adjusted R-squared:  0.5592 
+F-statistic: 11.36 on 6 and 43 DF,  p-value: 1.424e-07
+
